@@ -12,15 +12,15 @@ model Profile {
   id       String @id @default(uuid())
   userId   String @unique
   name     String
-  imageurl String @db.Text
-  email    String @unique
+  imageUrl String @db.Text
+  email    String @db.Text
 
-  servers Server[]
-  members Member[]
+  servers  Server[]
+  members  Member[]
+  channels Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Server    Server[]
 }
 
 model Server {
@@ -31,6 +31,9 @@ model Server {
 
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  members  Member[]
+  channels Channel[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -51,5 +54,36 @@ model Member {
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
+  serverId String
+  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serverId])
   @@index([profileId])
+}
+
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+model Channel {
+  id   String      @id @default(uuid())
+  name String
+  type ChannelType @default(TEXT)
+
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  serverId String
+  server   Server @relation(fields: [serverId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+  @@index([serverId])
 }

@@ -17,7 +17,7 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
   const router = useRouter()
 
   const onClick = () => {
-    router.push(`/servers/${id}}`)
+    router.push(`/servers/${id}`)
   }
 
   return (
@@ -25,9 +25,9 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
       <button onClick={onClick} className="group relative flex items-center">
         <div
           className={cn(
-            'absolute lef-0 bg-primary rounded-r-full transition-all w-[4px]',
-            params?.serverId !== id && 'group-hover:h-[20px]',
-            params?.serverId === id ? 'h-[36px]' : 'h-[8px]'
+            'absolute left-0 bg-primary rounded-r-full transition-all w-[4px]',
+            params?.serverId !== id && 'group-hover:h-[20px] h-[8px]',
+            params?.serverId === id && 'h-[36px]'
           )}
         />
         <div

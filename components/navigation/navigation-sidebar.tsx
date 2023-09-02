@@ -22,6 +22,9 @@ const NavigationSidebar = async () => {
           profileId: profile.id
         }
       }
+    },
+    orderBy:{
+      createdAt: 'desc'
     }
   })
 

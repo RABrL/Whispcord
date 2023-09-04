@@ -50,8 +50,8 @@ export const CreateServerModal = () => {
       const server = res.data as Server
 
       form.reset()
-      router.push(`/servers/${server.id}`)
       router.refresh()
+      router.push(`/servers/${server.id}`)
       onClose()
     } catch (error) {
       console.log(error)

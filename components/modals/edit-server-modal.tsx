@@ -25,8 +25,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FileUpload } from '@/components/file-upload'
 import { useModal } from '@/hooks/use-modal-store'
-import { FormTypes, formSchema } from '@/schemas/create-server'
-import { useEffect } from 'react'
+import { type serverSchemaTypes, serverSchema } from '@/schemas/create-server'
 
 export const EditServerModal = () => {
   const { isOpen, type, onClose, data } = useModal()
@@ -35,24 +34,17 @@ export const EditServerModal = () => {
   const isModalOpen = isOpen && type === 'editServer'
   const { server } = data
 
-  const form = useForm<FormTypes>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<serverSchemaTypes>({
+    resolver: zodResolver(serverSchema),
     defaultValues: {
-      name: '',
-      imageUrl: ''
+      name: server?.name,
+      imageUrl: server?.imageUrl
     }
   })
 
-  useEffect(() => {
-    if (server) {
-      form.setValue('name', server.name)
-      form.setValue('imageUrl', server.imageUrl)
-    }
-  }, [server, form])
-
   const isLoading = form.formState.isSubmitting
 
-  const onSubmit = async (values: FormTypes) => {
+  const onSubmit = async (values: serverSchemaTypes) => {
     try {
       await axios.patch(`/api/servers/${server?.id}`, values)
 

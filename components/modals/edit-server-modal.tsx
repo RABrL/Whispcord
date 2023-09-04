@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 import {
   Dialog,
@@ -41,6 +42,13 @@ export const EditServerModal = () => {
       imageUrl: server?.imageUrl
     }
   })
+
+  useEffect(() => {
+    if (server) {
+      form.setValue('name', server.name)
+      form.setValue('imageUrl', server.imageUrl)
+    }
+  }, [server, form])
 
   const isLoading = form.formState.isSubmitting
 

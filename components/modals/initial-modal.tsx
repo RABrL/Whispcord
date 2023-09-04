@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { FileUpload } from '@/components/file-upload'
-import { FormTypes, formSchema } from '@/schemas/create-server'
+import { type serverSchemaTypes, serverSchema } from '@/schemas/create-server'
 
 export const InitialModal = () => {
   const [isMounted, setIsMounted] = useState(false)
@@ -36,8 +36,8 @@ export const InitialModal = () => {
     setIsMounted(true)
   }, [])
 
-  const form = useForm<FormTypes>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<serverSchemaTypes>({
+    resolver: zodResolver(serverSchema),
     defaultValues: {
       name: '',
       imageUrl: ''
@@ -48,7 +48,7 @@ export const InitialModal = () => {
 
   const isLoading = form.formState.isSubmitting
 
-  const onSubmit = async (values: FormTypes) => {
+  const onSubmit = async (values: serverSchemaTypes) => {
     try {
       await axios.post('/api/servers', values)
 

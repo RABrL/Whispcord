@@ -110,10 +110,6 @@ export async function DELETE(
       }
     })
 
-    if (!server) {
-      return new NextResponse('Server not found', { status: 400 })
-    }
-
     return NextResponse.json(server)
   } catch (error) {
     console.log('[MEMBERS_ID_DELETE]', error)

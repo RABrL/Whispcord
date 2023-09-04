@@ -120,7 +120,7 @@ export const ManageMembersModal = () => {
                 loadingId !== member.id && (
                   <div className="ml-auto">
                     <DropdownMenu>
-                      <DropdownMenuTrigger>
+                      <DropdownMenuTrigger className='mr-1'>
                         <MoreVertical className="h-4 w-4 text-zinc-500" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent side="left">

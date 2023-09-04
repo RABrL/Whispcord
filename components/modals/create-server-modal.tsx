@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { Server } from '@prisma/client'
 
 import {
   Dialog,
@@ -27,8 +28,6 @@ import { FileUpload } from '@/components/file-upload'
 import { useModal } from '@/hooks/use-modal-store'
 import { type serverSchemaTypes, serverSchema } from '@/schemas/create-server'
 
-
-
 export const CreateServerModal = () => {
   const { isOpen, type, onClose } = useModal()
   const router = useRouter()
@@ -47,9 +46,11 @@ export const CreateServerModal = () => {
 
   const onSubmit = async (values: serverSchemaTypes) => {
     try {
-      await axios.post('/api/servers', values)
+      const res = await axios.post('/api/servers', values)
+      const server = res.data as Server
 
       form.reset()
+      router.push(`/servers/${server.id}`)
       router.refresh()
       onClose()
     } catch (error) {

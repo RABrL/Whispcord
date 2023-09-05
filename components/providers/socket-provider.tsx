@@ -14,7 +14,7 @@ const SocketContext = createContext<SocketContextype>({
   isConnected: false
 })
 
-const useSocket = () => {
+export const useSocket = () => {
   return useContext(SocketContext)
 }
 
@@ -25,6 +25,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     // rome-ignore lint/suspicious/noExplicitAny: <explanation>
     const socketInstance = new (ClientIO as any)(
+      // rome-ignore lint/style/noNonNullAssertion: <explanation>
       process.env.NEXT_PUBLIC_SITE_URL!,
       {
         path: '/api/socket/io',

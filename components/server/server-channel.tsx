@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import { ActionTooltip } from '@/components/action-tooltip'
+import { useModal } from '@/hooks/use-modal-store'
 
 interface ServerChannelProps {
   channel: Channel
@@ -26,6 +27,7 @@ export const ServerChannel = ({
 }: ServerChannelProps) => {
   const params = useParams()
   const router = useRouter()
+  const onOpen = useModal((state) => state.onOpen)
 
   const Icon = iconMap[channel.type]
 
@@ -53,7 +55,10 @@ export const ServerChannel = ({
             <Edit className="hidden group-hover:block h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition" />
           </ActionTooltip>
           <ActionTooltip label="Delete">
-            <Trash className="hidden group-hover:block h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition" />
+            <Trash
+              onClick={() => onOpen('deleteChannel', { server, channel })}
+              className="hidden group-hover:block h-4 w-4 text-zinc-500 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300 transition"
+            />
           </ActionTooltip>
         </div>
       )}

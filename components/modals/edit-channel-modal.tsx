@@ -3,7 +3,7 @@
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useParams, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import { useEffect } from 'react'
 
@@ -38,39 +38,39 @@ import {
 } from '@/schemas/create-channel'
 import { ChannelType } from '@prisma/client'
 
-export const CreateChannelModal = () => {
+export const EditChannelModal = () => {
   const { isOpen, type, onClose, data } = useModal()
   const router = useRouter()
-  const params = useParams()
 
-  const isModalOpen = isOpen && type === 'createChannel'
-  const { channelType } = data
+  const isModalOpen = isOpen && type === 'editChannel'
+  const { server, channel } = data
 
   const form = useForm<channelSchemaTypes>({
     resolver: zodResolver(channelSchema),
     defaultValues: {
-      name: '',
-      type: channelType || ChannelType.TEXT
+      name: channel?.name,
+      type: channel?.type || ChannelType.TEXT
     }
   })
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue('type', channelType)
+    if (channel) {
+      form.setValue('name', channel.name)
+      form.setValue('type', channel.type)
     }
-  }, [channelType, form])
+  }, [channel, form])
 
   const isLoading = form.formState.isSubmitting
 
   const onSubmit = async (values: channelSchemaTypes) => {
     try {
       const url = qs.stringifyUrl({
-        url: '/api/channels',
+        url: `/api/channels/${channel?.id}`,
         query: {
-          serverId: params?.serverId
+          serverId: server?.id
         }
       })
-      await axios.post(url, values)
+      await axios.patch(url, values)
 
       form.reset()
       router.refresh()
@@ -90,7 +90,7 @@ export const CreateChannelModal = () => {
       <DialogContent className="bg-white text-black p-0 overflow-hidden">
         <DialogHeader className="pt-8 px-6">
           <DialogTitle className="text-2xl text-center font-bold">
-            Create Channel
+            Edit Channel
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>

@@ -38,12 +38,7 @@ import {
   DropdownMenuSubTrigger
 } from '@/components/ui/dropdown-menu'
 import { ServerWithMembersWithProfiles } from '@/types'
-
-const roleIconMap = {
-  GUEST: null,
-  MODERATOR: <ShieldCheck className="h-4 w-4 ml-2 text-indigo-500" />,
-  ADMIN: <ShieldAlert className="h-4 w-4 text-rose-500" />
-}
+import { roleIconMap } from '@/lib/icons'
 
 export const ManageMembersModal = () => {
   const { isOpen, type, onClose, data, onOpen } = useModal()

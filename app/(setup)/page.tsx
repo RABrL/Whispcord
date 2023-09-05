@@ -14,6 +14,9 @@ const SetupPage = async () => {
           profileId: profile.id
         }
       }
+    },
+    orderBy: {
+      createdAt: 'desc'
     }
   })
 

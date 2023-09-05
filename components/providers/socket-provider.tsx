@@ -4,7 +4,6 @@ import { useContext, createContext, useEffect, useState } from 'react'
 import { io as ClientIO } from 'socket.io-client'
 
 type SocketContextype = {
-  // rome-ignore lint/suspicious/noExplicitAny: <explanation>
   socket: any | null
   isConnected: boolean
 }
@@ -23,7 +22,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [isConnected, setIsConnected] = useState(false)
 
   useEffect(() => {
-    // rome-ignore lint/suspicious/noExplicitAny: <explanation>
     const socketInstance = new (ClientIO as any)(
       // rome-ignore lint/style/noNonNullAssertion: <explanation>
       process.env.NEXT_PUBLIC_SITE_URL!,

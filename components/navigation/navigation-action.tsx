@@ -6,11 +6,12 @@ import { ActionTooltip } from '@/components/action-tooltip'
 import { useModal } from '@/hooks/use-modal-store'
 
 export const NavigationAction = () => {
-  const onOpen = useModal(state => state.onOpen)
+  const onOpen = useModal((state) => state.onOpen)
   return (
     <div>
       <ActionTooltip label="Add a server" align="center" side="right">
         <button
+          aria-label="Create server"
           onClick={() => onOpen('createServer')}
           className="group"
         >

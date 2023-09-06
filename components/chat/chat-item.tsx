@@ -1,6 +1,6 @@
 import { Member, MemberRole, Profile } from '@prisma/client'
 import Image from 'next/image'
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import z from 'zod'
 import qs from 'query-string'
 import axios from 'axios'
@@ -60,10 +60,40 @@ export const ChatItem = ({
   })
 
   useEffect(() => {
+    const handleKeyDown = (e: any) => {
+      if (e.key === 'Escape' || e.keyCode === 27) {
+        form.reset()
+        setIsEditing(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [form])
+
+  const isLoading = form.formState.isSubmitting
+
+  const onSubmit = async (values: formType) => {
+    try {
+      const url = qs.stringifyUrl({
+        url: `${socketUrl}/${id}`,
+        query: socketQuery
+      })
+
+      await axios.patch(url, values)
+      form.reset()
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsEditing(false)
+    }
+  }
+
+  useEffect(() => {
     form.reset({
       content: content
     })
-  }, [content])
+  }, [content, form])
 
   const fileType = fileUrl?.split('.').pop()
 
@@ -74,10 +104,6 @@ export const ChatItem = ({
   const canEditMessage = !deleted && isOwner && !fileUrl
   const isPDF = fileType === 'pdf' && fileUrl
   const isImage = !isPDF && fileUrl
-
-  const onSubmit = async (values: formType) => {
-    console.log(values)
-  }
 
   return (
     <div className="relative group flex items-center hover:bg-black/5 p-4 transition w-full">
@@ -110,6 +136,8 @@ export const ChatItem = ({
                 src={fileUrl}
                 alt={content}
                 fill
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover"
               />
             </a>
@@ -156,6 +184,7 @@ export const ChatItem = ({
                     <FormItem className="flex-1">
                       <FormControl>
                         <Input
+                          disabled={isLoading}
                           className="p-2 bg-zinc-200/90 dark:bg-zinc-700/75 border-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-zinc-600 dark:text-zinc-200"
                           placeholder="Edited message"
                           {...field}
@@ -164,12 +193,12 @@ export const ChatItem = ({
                     </FormItem>
                   )}
                 />
-                <Button size='sm' variant='primary'>
+                <Button disabled={isLoading} size="sm" variant="primary">
                   Save
                 </Button>
               </form>
-              <span className='text-[10px] mt-1 text-zinc-400'>
-                Press escape to cancel, enter to save
+              <span className="text-[10px] mt-1 text-zinc-400">
+                Press escape to cancel, Enter to save
               </span>
             </Form>
           )}

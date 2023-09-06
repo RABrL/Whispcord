@@ -79,6 +79,7 @@ export const ChatMessages = ({
       <ChatWelcome type={type} name={name} />
       <div className="flex flex-col-reverse mt-auto">
         {data?.pages.map((group, i) => (
+          // rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (
               <ChatItem

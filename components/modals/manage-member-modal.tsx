@@ -5,7 +5,6 @@ import {
   Gavel,
   Loader2,
   MoreVertical,
-  ShieldAlert,
   ShieldCheck,
   ShieldIcon,
   ShieldQuestion

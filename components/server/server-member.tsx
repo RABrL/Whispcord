@@ -1,9 +1,10 @@
 'use client'
 
-import { roleIconMap } from '@/lib/icons'
-import { cn } from '@/lib/utils'
 import { Member, Profile, Server } from '@prisma/client'
 import { useParams, useRouter } from 'next/navigation'
+
+import { cn } from '@/lib/utils'
+import { roleIconMap } from '@/lib/icons'
 import { UserAvatar } from '@/components//user-avatar'
 
 interface ServerMemberProps {

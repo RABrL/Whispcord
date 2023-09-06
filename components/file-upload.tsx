@@ -7,7 +7,6 @@ import Image from 'next/image'
 import axios from 'axios'
 
 import { UploadDropzone } from '@/lib/uploadthing'
-import { useState } from 'react'
 
 interface FileUploadProps {
   endpoint: 'serverImage' | 'messageFile'

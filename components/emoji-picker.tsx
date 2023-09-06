@@ -3,13 +3,13 @@
 import Picker from '@emoji-mart/react'
 import data from '@emoji-mart/data'
 import { useTheme } from 'next-themes'
+import { Smile } from 'lucide-react'
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
-import { Smile } from 'lucide-react'
 
 interface EmojiPickerProps {
   onChange: (value: string) => void

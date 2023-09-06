@@ -8,10 +8,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 
-import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useModal } from '@/hooks/use-modal-store'
 import { EmojiPicker } from '@/components/emoji-picker'
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
 
 interface ChatInputProps {
   apiUrl: string

@@ -6,6 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import qs from 'query-string'
 import { useEffect } from 'react'
+import { ChannelType } from '@prisma/client'
 
 import {
   Dialog,
@@ -36,7 +37,6 @@ import {
   channelSchema,
   type channelSchemaTypes
 } from '@/schemas/create-channel'
-import { ChannelType } from '@prisma/client'
 
 export const EditChannelModal = () => {
   const { isOpen, type, onClose, data } = useModal()

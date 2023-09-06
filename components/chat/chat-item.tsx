@@ -110,7 +110,7 @@ export const ChatItem = ({
   const fileType = fileUrl?.split('.').pop()
 
   const isAdmin = currentMember.role === MemberRole.ADMIN
-  const isModerator = isAdmin || MemberRole.MODERATOR
+  const isModerator = currentMember.role === MemberRole.MODERATOR
   const isOwner = currentMember.id === member.id
   const canDeleteMesssage = !deleted && (isAdmin || isModerator || isOwner)
   const canEditMessage = !deleted && isOwner && !fileUrl

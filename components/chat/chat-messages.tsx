@@ -1,22 +1,18 @@
 'use client'
 
-import { Member, Message, Profile } from '@prisma/client'
+import { Member } from '@prisma/client'
 import { Loader2, ServerCrash } from 'lucide-react'
 import { Fragment } from 'react'
 import { format } from 'date-fns'
 
 import { useChatQuery } from '@/hooks/use-chat-query'
+import { MessageWithMemberWithProfile } from '@/types'
 
 import { ChatWelcome } from './chat-welcome'
 import { ChatItem } from './chat-item'
+import { useChatSocket } from '@/hooks/use-chat-socket'
 
 const DATE_FORMAT = 'd MMM yyy, HH:mm'
-
-type MessageWithMemberWithProfile = Message & {
-  member: Member & {
-    profile: Profile
-  }
-}
 
 interface ChatMessagesProps {
   name: string
@@ -42,6 +38,8 @@ export const ChatMessages = ({
   type
 }: ChatMessagesProps) => {
   const queryKey = `chat:${chatId}`
+  const addKey = `chat:${chatId}:messages`
+  const updateKey = `chat:${chatId}:messages:update`
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } =
     useChatQuery({
@@ -50,6 +48,8 @@ export const ChatMessages = ({
       paramValue,
       queryKey
     })
+
+  useChatSocket({ queryKey, addKey, updateKey })
 
   if (status === 'loading') {
     return (
@@ -78,7 +78,7 @@ export const ChatMessages = ({
       <div className="flex-1" />
       <ChatWelcome type={type} name={name} />
       <div className="flex flex-col-reverse mt-auto">
-        {data?.pages.map((group, i) => (
+        {data?.pages?.map((group, i) => (
           // rome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <Fragment key={i}>
             {group.items.map((message: MessageWithMemberWithProfile) => (

@@ -28,6 +28,9 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
     where: {
       serverId: params.serverId,
       profileId: profile.id
+    },
+    include: {
+      profile: true
     }
   })
 
@@ -57,6 +60,8 @@ const ChannelIdPage = async ({ params }: ChannelIdPageProps) => {
         paramValue={channel.id}
       />
       <ChatInput
+        member={member}
+        queryKey={`chat:${channel.id}`}
         name={channel.name}
         type="channel"
         apiUrl="/api/socket/messages"

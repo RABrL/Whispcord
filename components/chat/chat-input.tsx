@@ -7,17 +7,80 @@ import { Plus } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { Input } from '@/components/ui/input'
 import { useModal } from '@/hooks/use-modal-store'
 import { EmojiPicker } from '@/components/emoji-picker'
 import { Form, FormControl, FormField, FormItem } from '@/components/ui/form'
+import { Member } from '@prisma/client'
 
 interface ChatInputProps {
   apiUrl: string
   query: Record<string, any>
   name: string
   type: 'conversation' | 'channel'
+  member: Member
+  queryKey: string
+}
+
+const useAddMessage = (url: string, queryKey: string, member: Member) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (values: { content: string }) => axios.post(url, values),
+    onMutate: async (values) => {
+      queryClient.cancelQueries({ queryKey: [queryKey] })
+
+      const previousMessages = queryClient.getQueryData([queryKey])
+
+      const createdAt = new Date(Date.now())
+
+      const newMessage = {
+        ...values,
+        id: crypto.randomUUID(),
+        member,
+        deleted: false,
+        createdAt,
+        updatedAt: createdAt
+      }
+
+      if (previousMessages) {
+        queryClient.setQueryData([queryKey], (oldData: any) => {
+          if (!oldData || !oldData.pages || oldData.pages.length === 0) {
+            return {
+              pages: [
+                {
+                  items: [newMessage]
+                }
+              ]
+            }
+          }
+
+          const newData = [...oldData.pages]
+
+          newData[0] = {
+            ...newData[0],
+            items: [newMessage, ...newData[0].items]
+          }
+
+          return {
+            ...oldData,
+            pages: newData
+          }
+        })
+      }
+
+      return { previousMessages }
+    },
+    onError: (error, cariables, context) => {
+      if (context?.previousMessages) {
+        queryClient.setQueryData([queryKey], context.previousMessages)
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: [queryKey] })
+    }
+  })
 }
 
 const formSchema = z.object({
@@ -26,7 +89,14 @@ const formSchema = z.object({
 
 type formType = z.infer<typeof formSchema>
 
-export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
+export const ChatInput = ({
+  apiUrl,
+  query,
+  name,
+  type,
+  member,
+  queryKey
+}: ChatInputProps) => {
   const onOpen = useModal((state) => state.onOpen)
   const router = useRouter()
   const form = useForm<formType>({
@@ -38,15 +108,16 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
 
   const isLoading = form.formState.isSubmitting
 
+  const url = qs.stringifyUrl({
+    url: apiUrl,
+    query
+  })
+
+  const addMessageMutation = useAddMessage(url, queryKey, member)
   const onSubmit = async (values: formType) => {
     try {
-      const url = qs.stringifyUrl({
-        url: apiUrl,
-        query
-      })
+      addMessageMutation.mutate(values)
 
-      await axios.post(url, values)
-      
       form.reset()
       router.refresh()
     } catch (error) {

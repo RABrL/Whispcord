@@ -23,7 +23,7 @@ export const NavigationSidebar = async () => {
         }
       }
     },
-    orderBy:{
+    orderBy: {
       createdAt: 'desc'
     }
   })

@@ -11,6 +11,7 @@ export const MobileToggle = ({serverId}:{serverId: string}) => {
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className='md:hidden'>
           <Menu />
+          <span className='sr-only'>Menu toggle</span>
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="p-0 flex gap-0">

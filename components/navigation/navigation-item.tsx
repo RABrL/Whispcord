@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 
 import { cn } from '@/lib/utils'
 import { ActionTooltip } from '@/components/action-tooltip'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
 
 interface NavigationItemProps {
   id: string
@@ -37,12 +38,15 @@ export const NavigationItem = ({ id, imageUrl, name }: NavigationItemProps) => {
               'bg-primary/10 text-primary rounded-[16px]'
           )}
         >
-          <Image
-            fill
-            src={imageUrl}
-            alt="Channel"
-            sizes="(max-width: 768px) 20vw"
-          />
+          <AspectRatio ratio={1 / 1}>
+            <Image
+              fill
+              src={imageUrl}
+              alt="Channel"
+              className="object-cover"
+              sizes="(max-width: 768px) 20vw"
+            />
+          </AspectRatio>
         </div>
       </button>
     </ActionTooltip>

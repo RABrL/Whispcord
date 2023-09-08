@@ -46,7 +46,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
       })
 
       await axios.post(url, values)
-      
+
       form.reset()
       router.refresh()
     } catch (error) {
@@ -69,6 +69,7 @@ export const ChatInput = ({ apiUrl, query, name, type }: ChatInputProps) => {
                     className="absolute top-7 left-8 h-[24px] w-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full p-1 flex items-center justify-center"
                   >
                     <Plus className="text-white dark:text-[#313338]" />
+                    <span className="sr-only">Add file</span>
                   </button>
                   <Input
                     disabled={isLoading}

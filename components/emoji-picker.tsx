@@ -22,6 +22,7 @@ export const EmojiPicker = ({ onChange }: EmojiPickerProps) => {
     <Popover>
       <PopoverTrigger>
         <Smile className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
+        <span className="sr-only">Emoji picker</span>
       </PopoverTrigger>
       <PopoverContent
         className="bg-transparent border-none shadow-none drop-shadow-none mb-16"

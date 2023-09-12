@@ -29,10 +29,12 @@ export const DeleteServerModal = () => {
       setIsLoading(true)
 
       await axios.delete(`/api/servers/${server?.id}`)
+      await axios.delete('/api/uploadthing', {
+        data: { file: server?.imageUrl.split('/').pop() }
+      })
 
       onClose()
-      router.refresh()
-      router.push('/')
+      router.replace('/')
     } catch (error) {
       console.log(error)
     } finally {

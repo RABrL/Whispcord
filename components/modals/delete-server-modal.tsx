@@ -34,7 +34,8 @@ export const DeleteServerModal = () => {
       })
 
       onClose()
-      router.replace('/')
+      router.push('/')
+      router.refresh()
     } catch (error) {
       console.log(error)
     } finally {
